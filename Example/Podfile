@@ -1,0 +1,14 @@
+use_frameworks!
+
+target 'GDSegmentBar_Example' do
+  pod 'GDSegmentBar', :path => '../'
+
+  target 'GDSegmentBar_Tests' do
+    inherit! :search_paths
+
+    pod 'Specta'
+  pod 'Expecta'
+  pod 'FBSnapshotTestCase'
+  pod 'Expecta+Snapshots'
+  end
+end
