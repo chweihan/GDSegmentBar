@@ -7,6 +7,7 @@
 //
 
 #import "GDViewController.h"
+#import "GDSegmentBar.h"
 
 @interface GDViewController ()
 
@@ -18,6 +19,17 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    
+    CGFloat width = [UIScreen mainScreen].bounds.size.width;
+    
+    
+    GDSegmentBar *segmentBar = [GDSegmentBar segmentBarWithFrame:CGRectMake(0, 64, width, 30)];
+    segmentBar.backgroundColor = [UIColor redColor];
+    [self.view addSubview:segmentBar];
+    
+    segmentBar.items = @[@"专辑", @"声音", @"下载中", @"专辑", @"声音", @"下载中", @"专辑", @"声音", @"下载中", @"专辑", @"声音", @"下载中"];
+
+    
 }
 
 - (void)didReceiveMemoryWarning

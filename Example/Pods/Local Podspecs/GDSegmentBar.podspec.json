@@ -1,0 +1,22 @@
+{
+  "name": "GDSegmentBar",
+  "version": "0.1.0",
+  "summary": "A short description of GDSegmentBar.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/327708740@qq.com/GDSegmentBar",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "327708740@qq.com": "327708740@qq.com"
+  },
+  "source": {
+    "git": "https://github.com/327708740@qq.com/GDSegmentBar.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "GDSegmentBar/Classes/**/*"
+}

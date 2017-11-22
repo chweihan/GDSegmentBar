@@ -1,0 +1,6 @@
+framework module Pods_GDSegmentBar_Example {
+  umbrella header "Pods-GDSegmentBar_Example-umbrella.h"
+
+  export *
+  module * { export * }
+}
