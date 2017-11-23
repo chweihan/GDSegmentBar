@@ -12,10 +12,15 @@
 #define kMinMargin 30
 
 @interface GDSegmentBar()
+{
+    UIButton *_lastBtn;
+}
 
 @property (nonatomic, weak) UIScrollView *contentView;
 
 @property (nonatomic, strong) NSMutableArray <UIButton *>*itemBtns;
+
+@property (nonatomic, strong) UIView *indicatorView;
 
 @end
 
@@ -45,6 +50,9 @@
     //根据所有的选项数据源,创建button，添加到内容视图
     for (NSString *item in items) {
         UIButton *btn = [[UIButton alloc] init];
+        [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchDown];
+        [btn setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+        [btn setTitleColor:[UIColor redColor] forState:UIControlStateSelected];
         [btn setTitle:item forState:UIControlStateNormal];
         [self.contentView addSubview:btn];
         [self.itemBtns addObject:btn];
@@ -53,7 +61,6 @@
     //手动刷新布局
     [self setNeedsLayout];
     [self layoutIfNeeded];
-    
 }
 
 - (void)layoutSubviews {
@@ -83,7 +90,29 @@
         lastX += btn.width + caculateMargin;
     }
     self.contentView.contentSize = CGSizeMake(lastX, 0);
+}
 
+- (void)btnClick:(UIButton *)btn {
+    _lastBtn.selected = NO;
+    btn.selected = YES;
+    _lastBtn = btn;
+    
+    [UIView animateWithDuration:0.1 animations:^{
+        self.indicatorView.width = btn.width;
+        self.indicatorView.centerX = btn.centerX;
+    }];
+    
+    CGFloat scrollX = btn.centerX - self.contentView.width * 0.5;
+    
+    if (scrollX < 0) {
+        scrollX = 0;
+    }
+    
+    if (scrollX > self.contentView.contentSize.width - self.contentView.width) {
+        scrollX = self.contentView.contentSize.width - self.contentView.width;
+    }
+    
+    [self.contentView setContentOffset:CGPointMake(scrollX, 0) animated:YES];
     
 }
 
@@ -94,6 +123,17 @@
         _itemBtns = [NSMutableArray array];
     }
     return _itemBtns;
+}
+
+- (UIView *)indicatorView {
+    if (_indicatorView == nil) {
+        CGFloat indicatorH = 2;
+        UIView *indicatorView = [[UIView alloc] initWithFrame:CGRectMake(0, self.height - indicatorH, 0, indicatorH)];
+        indicatorView.backgroundColor = [UIColor redColor];
+        [self.contentView addSubview:indicatorView];
+        _indicatorView = indicatorView;
+    }
+    return _indicatorView;
 }
 
 

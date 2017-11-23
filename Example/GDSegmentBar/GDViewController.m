@@ -24,7 +24,7 @@
     
     
     GDSegmentBar *segmentBar = [GDSegmentBar segmentBarWithFrame:CGRectMake(0, 64, width, 30)];
-    segmentBar.backgroundColor = [UIColor redColor];
+    segmentBar.backgroundColor = [UIColor greenColor];
     [self.view addSubview:segmentBar];
     
     segmentBar.items = @[@"专辑", @"声音", @"下载中", @"专辑", @"声音", @"下载中", @"专辑", @"声音", @"下载中", @"专辑", @"声音", @"下载中"];
