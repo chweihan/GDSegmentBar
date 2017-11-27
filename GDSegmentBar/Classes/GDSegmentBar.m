@@ -40,6 +40,24 @@
     return segmentBar;
 }
 
+- (void)setSelectIndex:(NSInteger)selectIndex {
+    
+    if (selectIndex < 0
+        || selectIndex > self.itemBtns.count - 1
+        || self.itemBtns.count == 0) {
+        
+        return;
+    }
+    
+    _selectIndex = selectIndex;
+    
+    UIButton *btn = self.itemBtns[selectIndex];
+    
+    [self btnClick:btn];
+    
+}
+
+
 - (void)setItems:(NSArray<NSString *> *)items {
     _items = items;
     
@@ -50,6 +68,7 @@
     //根据所有的选项数据源,创建button，添加到内容视图
     for (NSString *item in items) {
         UIButton *btn = [[UIButton alloc] init];
+        btn.tag = self.itemBtns.count;
         [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchDown];
         [btn setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
         [btn setTitleColor:[UIColor redColor] forState:UIControlStateSelected];
@@ -93,6 +112,11 @@
 }
 
 - (void)btnClick:(UIButton *)btn {
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(segmentBar:inIndex:toIndex:)]) {
+        [self.delegate segmentBar:self inIndex:_lastBtn.tag toIndex:btn.tag];
+    }
+    
     _lastBtn.selected = NO;
     btn.selected = YES;
     _lastBtn = btn;
@@ -113,7 +137,7 @@
     }
     
     [self.contentView setContentOffset:CGPointMake(scrollX, 0) animated:YES];
-    
+
 }
 
 

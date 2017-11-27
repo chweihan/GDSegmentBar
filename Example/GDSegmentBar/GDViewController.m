@@ -9,7 +9,9 @@
 #import "GDViewController.h"
 #import "GDSegmentBar.h"
 
-@interface GDViewController ()
+@interface GDViewController ()<GDSegmentBarDelegate>
+
+@property (nonatomic, weak) GDSegmentBar *segmentBar;
 
 @end
 
@@ -20,22 +22,38 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
-    CGFloat width = [UIScreen mainScreen].bounds.size.width;
-    
-    
-    GDSegmentBar *segmentBar = [GDSegmentBar segmentBarWithFrame:CGRectMake(0, 64, width, 30)];
-    segmentBar.backgroundColor = [UIColor greenColor];
-    [self.view addSubview:segmentBar];
-    
-    segmentBar.items = @[@"专辑", @"声音", @"下载中", @"专辑", @"声音", @"下载中", @"专辑", @"声音", @"下载中", @"专辑", @"声音", @"下载中"];
+
+    self.segmentBar.items = @[@"专辑", @"声音", @"下载中", @"专辑", @"声音", @"下载中", @"专辑", @"声音", @"下载中", @"专辑", @"声音", @"下载中"];
+
+
 
     
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+#pragma mark - GDSegmentBarDelegate
+- (void)segmentBar:(GDSegmentBar *)segmentBar inIndex:(NSInteger)inIndex toIndex:(NSInteger)toIndex {
+    
+    NSLog(@"inIndex -- %zd toIndex -- %zd",inIndex,toIndex);
+    
+}
+
+#pragma mark - touch
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    self.segmentBar.selectIndex = 3;
+}
+
+#pragma mark - lazy
+- (GDSegmentBar *)segmentBar {
+    if (_segmentBar == nil) {
+        CGFloat width = [UIScreen mainScreen].bounds.size.width;
+        GDSegmentBar *segmentBar = [GDSegmentBar segmentBarWithFrame:CGRectMake(0, 64, width, 30)];
+        segmentBar.backgroundColor = [UIColor greenColor];
+        segmentBar.delegate = self;
+        [self.view addSubview:segmentBar];
+        _segmentBar = segmentBar;
+    }
+    return _segmentBar;
 }
 
 @end

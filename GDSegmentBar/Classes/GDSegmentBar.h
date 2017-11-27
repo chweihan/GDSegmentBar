@@ -8,10 +8,22 @@
 
 #import <UIKit/UIKit.h>
 
+@class GDSegmentBar;
+
+@protocol GDSegmentBarDelegate <NSObject>
+
+- (void)segmentBar:(GDSegmentBar *)segmentBar inIndex:(NSInteger)inIndex toIndex:(NSInteger)toIndex;
+
+@end
+
 @interface GDSegmentBar : UIView
 
 + (instancetype)segmentBarWithFrame:(CGRect)frame;
 
 @property (nonatomic, strong) NSArray <NSString *>*items;
+
+@property (nonatomic, assign) NSInteger selectIndex;
+
+@property (nonatomic, weak) id<GDSegmentBarDelegate> delegate;
 
 @end
