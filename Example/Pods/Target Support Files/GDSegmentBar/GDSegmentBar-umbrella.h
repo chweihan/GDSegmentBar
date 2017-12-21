@@ -11,6 +11,7 @@
 #endif
 
 #import "GDSegmentBar.h"
+#import "GDSegmentViewController.h"
 #import "UIView+GDSegmentBar.h"
 
 FOUNDATION_EXPORT double GDSegmentBarVersionNumber;

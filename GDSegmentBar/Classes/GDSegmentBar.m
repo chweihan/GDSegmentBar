@@ -28,33 +28,22 @@
 @implementation GDSegmentBar
 
 + (instancetype)segmentBarWithFrame:(CGRect)frame {
-    
     GDSegmentBar *segmentBar = [[GDSegmentBar alloc] initWithFrame:frame];
-    
-    //创建内容承载视图
-    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:frame];
-    scrollView.showsHorizontalScrollIndicator = NO;
-    [segmentBar addSubview:scrollView];
-    segmentBar.contentView = scrollView;
-    
     return segmentBar;
 }
 
 - (void)setSelectIndex:(NSInteger)selectIndex {
     
-    if (selectIndex < 0
-        || selectIndex > self.itemBtns.count - 1
-        || self.itemBtns.count == 0) {
-        
+    //数据过滤
+    if (self.itemBtns.count == 0 || selectIndex < 0 || selectIndex > self.itemBtns.count - 1) {
         return;
     }
-    
+
     _selectIndex = selectIndex;
     
     UIButton *btn = self.itemBtns[selectIndex];
     
     [self btnClick:btn];
-    
 }
 
 
@@ -82,35 +71,7 @@
     [self layoutIfNeeded];
 }
 
-- (void)layoutSubviews {
-    [super layoutSubviews];
-    self.contentView.frame = self.bounds;
-    
-    //计算margin
-    CGFloat totalBtnWidth = 0;
-    for (UIButton *btn in self.itemBtns) {
-        [btn sizeToFit];
-        totalBtnWidth += btn.width;
-    }
-    
-    CGFloat caculateMargin = (self.width - totalBtnWidth) / (self.itemBtns.count + 1);
-    if (caculateMargin < kMinMargin) {
-        caculateMargin = kMinMargin;
-    }
-    
-    CGFloat lastX = caculateMargin;
-    for (UIButton *btn in self.itemBtns) {
-        // w,h
-        [btn sizeToFit];
-        
-        btn.y = 0;
-        btn.x = lastX;
-        
-        lastX += btn.width + caculateMargin;
-    }
-    self.contentView.contentSize = CGSizeMake(lastX, 0);
-}
-
+#pragma mark - private
 - (void)btnClick:(UIButton *)btn {
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(segmentBar:inIndex:toIndex:)]) {
@@ -140,6 +101,44 @@
 
 }
 
+#pragma mark - 布局
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    self.contentView.frame = self.bounds;
+    
+    //计算margin
+    CGFloat totalBtnWidth = 0;
+    for (UIButton *btn in self.itemBtns) {
+        [btn sizeToFit];
+        totalBtnWidth += btn.width;
+    }
+    
+    CGFloat caculateMargin = (self.width - totalBtnWidth) / (self.itemBtns.count + 1);
+    if (caculateMargin < kMinMargin) {
+        caculateMargin = kMinMargin;
+    }
+    
+    CGFloat lastX = caculateMargin;
+    for (UIButton *btn in self.itemBtns) {
+        // w,h
+        [btn sizeToFit];
+        
+        btn.y = 0;
+        btn.x = lastX;
+        
+        lastX += btn.width + caculateMargin;
+    }
+    self.contentView.contentSize = CGSizeMake(lastX, 0);
+    
+    if (self.itemBtns.count == 0) {
+        return;
+    }
+    UIButton *btn = self.itemBtns[self.selectIndex];
+    self.indicatorView.width = btn.width;
+    self.indicatorView.centerX = btn.centerX;
+    self.indicatorView.y = self.height - self.indicatorView.height;
+
+}
 
 #pragma mark - lazy
 - (NSMutableArray<UIButton *> *)itemBtns {
@@ -160,6 +159,16 @@
     return _indicatorView;
 }
 
+- (UIScrollView *)contentView {
+    if (_contentView == nil) {
+        //创建内容承载视图
+        UIScrollView *scrollView = [[UIScrollView alloc] init];
+        scrollView.showsHorizontalScrollIndicator = NO;
+        [self addSubview:scrollView];
+        _contentView = scrollView;
+    }
+    return _contentView;
+}
 
 
 
